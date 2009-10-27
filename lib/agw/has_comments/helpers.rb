@@ -31,14 +31,15 @@ module AGW
       #--
       # TODO: make this work with associated users
       def gravatar_for(comment, options = {})
-        email = comment.email || raise ArgumentError, 'Comment should have an e-mail for gravatars to work.'
-
+        email = comment.email
+        raise ArgumentError.new('Comment should have an e-mail for gravatars to work.') if email.blank?
+        
         image_tag gravatar_url(email, options), {
           :alt    => 'Gravatar',
           :size   => '',
           :width  => (options[:size] || '80'),
-          :height => (options[:size] || '80')
-          :class  => 'gravatar'
+          :height => (options[:size] || '80'),
+          :class  => 'gravatar'}
       end
 
       # Shortcut method to a form_for with fields_for a new comment.

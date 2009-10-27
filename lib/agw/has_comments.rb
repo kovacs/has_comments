@@ -86,7 +86,7 @@ module AGW #:nodoc:
                   :dependent  => :destroy
 
         # Use nested models to manage Comments
-        accepts_nested_attributes_for :comments, :allow_destroy => true
+        # accepts_nested_attributes_for :comments, :allow_destroy => true
 
         include InstanceMethods unless included_modules.include? InstanceMethods
 

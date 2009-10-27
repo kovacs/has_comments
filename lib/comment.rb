@@ -4,7 +4,8 @@ class Comment < ActiveRecord::Base
   belongs_to    :commentable,
                 :polymorphic => true,
                 :counter_cache => true
-
+  belongs_to    :user
+                
   # Validations
   validates_presence_of :body
 
@@ -25,7 +26,7 @@ class Comment < ActiveRecord::Base
   after_save    :update_counter_cache
 
   # Scopes
-  default_scope :order => 'created_at DESC, approved_at DESC'
+  # default_scope :order => 'created_at DESC, approved_at DESC'
   named_scope   :approved, :conditions => 'approved_at IS NOT NULL'
   named_scope   :pending, :conditions => 'approved_at IS NULL'
 
@@ -116,12 +117,12 @@ private
   # Custom validation. This checks to see if the commentable object is
   # actually open for comments.
   def commentable_is_open
-    errors.add_to_base 'You cannot comment on this object.' unless commentable.open_for_comments?
+    errors.add_to_base 'You cannot comment on this object.' unless !commentable.nil? && commentable.open_for_comments?
   end
 
   # Custom validation. This checks to see if the current user is
   # actually allowed to comment.
   def authorised_only
-    errors.add_to_base 'You are not allowed to comment on this object.' unless commentable.authorised_for_comments?(self.user_id)
+    errors.add_to_base 'You are not allowed to comment on this object.' unless !commentable.nil? && commentable.authorised_for_comments?(self.user_id)
   end
 end
