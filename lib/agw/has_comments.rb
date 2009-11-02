@@ -85,6 +85,13 @@ module AGW #:nodoc:
                   :order      => 'created_at DESC',
                   :dependent  => :destroy
 
+        has_many  :parent_comments,
+                  :as         => :commentable,
+                  :order      => 'created_at DESC',
+                  :dependent  => :destroy,
+                  :conditions => 'parent_id is NULL',
+                  :class_name => 'Comment'
+
         # Use nested models to manage Comments
         # accepts_nested_attributes_for :comments, :allow_destroy => true
 
